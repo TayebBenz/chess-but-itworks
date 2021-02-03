@@ -27,7 +27,7 @@ render.init()
 while 1:
     render.screen.fill(black)
     if board.turn:
-        Ai.generate_move(board,4)
+        Ai.generate_move(board,6)
     else:
         mouse.pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
@@ -46,6 +46,7 @@ while 1:
                         move = chess.Move(square,collision)
                         if move in board.legal_moves:
                             board.push(move)
+                            Ai.advance_tree(move)
 
                 mouse.square = []
 

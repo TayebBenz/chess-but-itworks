@@ -8,22 +8,22 @@ black = 0,0,0
 white = 255,255,255
 
 
-darkSquare = pygame.image.load("Assets\dark.png")
-whiteSquare = pygame.image.load("Assets\white.png")
+darkSquare = pygame.image.load("Assets/dark.png")
+whiteSquare = pygame.image.load("Assets/white.png")
 
-whitepawn = pygame.image.load("Assets\whitepawn.png")
-whitebishop = pygame.image.load("Assets\whitebishop.png")
-whiterook = pygame.image.load("Assets\whiterook.png")
-whiteknight = pygame.image.load("Assets\whiteknight.png")
-whitequeen = pygame.image.load("Assets\whitequeen.png")
-whiteking = pygame.image.load("Assets\whiteking.png")
+whitepawn = pygame.image.load("Assets/whitepawn.png")
+whitebishop = pygame.image.load("Assets/whitebishop.png")
+whiterook = pygame.image.load("Assets/whiterook.png")
+whiteknight = pygame.image.load("Assets/whiteknight.png")
+whitequeen = pygame.image.load("Assets/whitequeen.png")
+whiteking = pygame.image.load("Assets/whiteking.png")
 
-darkpawn = pygame.image.load("Assets\darkpawn.png")
-darkbishop = pygame.image.load("Assets\darkbishop.png")
-darkrook = pygame.image.load("Assets\darkrook.png")
-darkknight = pygame.image.load("Assets\darkknight.png")
-darkqueen = pygame.image.load("Assets\darkqueen.png")
-darkking = pygame.image.load("Assets\darkking.png")
+darkpawn = pygame.image.load("Assets/darkpawn.png")
+darkbishop = pygame.image.load("Assets/darkbishop.png")
+darkrook = pygame.image.load("Assets/darkrook.png")
+darkknight = pygame.image.load("Assets/darkknight.png")
+darkqueen = pygame.image.load("Assets/darkqueen.png")
+darkking = pygame.image.load("Assets/darkking.png")
 
 
 size = width, height = 1000,600
