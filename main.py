@@ -5,6 +5,7 @@ import random
 from datetime import datetime
 import chessrender as render
 import AIkekW as Ai
+import datetime
 
 class Mouse:
     pos = None
@@ -24,10 +25,13 @@ white = 255,255,255
 
 
 render.init()
+
 while 1:
     render.screen.fill(black)
     if board.turn:
+        tmp_date = datetime.datetime.now()
         Ai.generate_move(board,6)
+        print("It took around :",datetime.datetime.now()-tmp_date)
     else:
         mouse.pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
@@ -46,8 +50,6 @@ while 1:
                         move = chess.Move(square,collision)
                         if move in board.legal_moves:
                             board.push(move)
-                            Ai.advance_tree(move)
-
                 mouse.square = []
 
     render.board()
