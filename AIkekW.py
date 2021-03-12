@@ -4,6 +4,7 @@ import sys, pygame
 from pygame.locals import *
 import random
 import datetime
+from numba import jit
 
 
 total_moves = 0
@@ -130,8 +131,16 @@ def Tree_cont_player(root,board):
 
 def minmaxing(board,alpha,beta,depth,maximixingPlayer):
 
-    if board.is_checkmate() or board.is_stalemate() or depth == 0:
+    if depth == 0:
         return evaluate_position(board)
+
+    if board.is_checkmate():
+        if maximixingPlayer:
+            return -990
+        else:
+            return 990
+    elif board.is_stalemate():
+        return 0
 
     if maximixingPlayer:
         maxEval = -999
@@ -142,7 +151,7 @@ def minmaxing(board,alpha,beta,depth,maximixingPlayer):
             board.pop()
 
             alpha = max(alpha,Eval)
-            if beta <= alpha:
+            if beta < alpha:
                 break
 
         return maxEval
@@ -156,7 +165,7 @@ def minmaxing(board,alpha,beta,depth,maximixingPlayer):
             board.pop()
 
             beta = min(beta,Eval)
-            if beta <= alpha:
+            if beta < alpha:
                 break
         return minEval
 
@@ -181,6 +190,7 @@ def first_move(board,depth):
         elif Eval == Evalmax:
             bestMoves.append(move)
 
+        alpha = max(alpha,Eval)
         board.pop()
 
 
@@ -258,18 +268,44 @@ def counter_moves(board,depth,alpha,beta):
 
     return value
 
-def evaluate_position(board):
-
-    global total_moves
-    total_moves+=1
+@jit(nopython=True)
+def New_Eval(pieces):
     Eval = 0
-
-    for square in range(0,64):
-        piece = board.piece_at(square)
-        if piece:
-            Eval += pieceValue_disc[piece.symbol()]
+    for piece_symbol in pieces:
+        if piece_symbol == 'r':
+            Eval += -5
+        elif  piece_symbol == 'n':
+            Eval += -3
+        elif  piece_symbol == 'b':
+            Eval += -3
+        elif  piece_symbol == 'q':
+            Eval += -9
+        elif  piece_symbol == 'p':
+            Eval += -1
+        elif  piece_symbol == 'P':
+            Eval += 1
+        elif  piece_symbol == 'R':
+            Eval += 5
+        elif  piece_symbol == 'N':
+            Eval += 3
+        elif  piece_symbol == 'B':
+            Eval += 3
+        elif  piece_symbol == 'Q':
+            Eval += 9
 
     return Eval
+
+def evaluate_position(board):
+    global total_moves
+    total_moves += 1
+    Eval = 0
+    for piece in board.piece_map().values():
+        Eval += pieceValue_disc[piece.symbol()]
+    return Eval
+
+def test_Eval(board):
+    for piece in board.piece_map().values():
+        piece.symbol()
 
 
 # def evaluate_position(board):

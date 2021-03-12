@@ -6,6 +6,9 @@ from datetime import datetime
 import chessrender as render
 import AIkekW as Ai
 import datetime
+from timeit import timeit
+from numba.typed import List
+
 
 class Mouse:
     pos = None
@@ -30,7 +33,7 @@ while 1:
     render.screen.fill(black)
     if board.turn:
         tmp_date = datetime.datetime.now()
-        Ai.generate_move(board,6)
+        Ai.generate_move(board,4)
         print("It took around :",datetime.datetime.now()-tmp_date)
     else:
         mouse.pos = pygame.mouse.get_pos()
