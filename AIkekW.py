@@ -72,7 +72,7 @@ def generate_move(board,depth):
 
     global total_moves
     total_moves = 0
-    best_move = first_move(board,depth)
+    best_move = first_move(board.copy(),depth)
 
     print("total moves :", total_moves)
 
