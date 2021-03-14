@@ -8,6 +8,7 @@ import AIkekW as Ai
 import datetime
 from timeit import timeit
 from numba.typed import List
+import threading
 
 
 class Mouse:
@@ -22,6 +23,7 @@ board = chess.Board()
 render_board = board.copy()
 mouse = Mouse()
 tmp_stack = []
+generating_move = False
 
 # colors
 black = 0,0,0
@@ -30,13 +32,15 @@ white = 255,255,255
 
 
 render.init_test()
-
 while 1:
     render.screen.fill(black)
-    if board.turn:
+    if board.turn and not generating_move and not board.is_game_over():
         tmp_date = datetime.datetime.now()
-        Ai.generate_move(board,4)
-        print("It took around :",datetime.datetime.now()-tmp_date)
+        x = threading.Thread(target=Ai.generate_move, args=(board,2), daemon=True)
+        generating_move = True
+        x.start()
+        # Ai.generate_move(board,2)
+        # print("It took around :",datetime.datetime.now()-tmp_date)
     else:
         mouse.pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
@@ -54,13 +58,13 @@ while 1:
                                 if not(not tmp_stack):
                                     render_board.push(tmp_stack.pop())
                             elif collision == "end":
-                                render_board = board.copy()
-                                tmp_stack = []
+                                while not(not tmp_stack):
+                                    render_board.push(tmp_stack.pop())
                             elif collision == "previous":
                                 if not not(render_board.move_stack):
                                     tmp_stack.append(render_board.pop())
                             elif collision == "begin":
-                                while len(render_board.move_stack) > 1:
+                                while len(render_board.move_stack) >= 1:
                                     tmp_stack.append(render_board.pop())
 
 
@@ -73,8 +77,41 @@ while 1:
                             board.push(move)
                 mouse.square = []
 
-    if not tmp_stack:
+    if generating_move and threading.active_count() == 1:
+        print("It took around :",datetime.datetime.now()-tmp_date)
+        generating_move = False
+    if not tmp_stack and not generating_move:
         render_board = board.copy()
+
+    if  board.is_game_over():
+        mouse.square = []
+        while 1:
+            render.screen.fill(black)
+            for event in pygame.event.get():
+                mouse.pos = pygame.mouse.get_pos()
+                if event.type == pygame.QUIT: sys.exit()
+                if event.type == MOUSEBUTTONDOWN:
+                    for button in pygame.mouse.get_pressed(num_buttons=3):
+                        if button == True:
+                            collision = render.Arrows_collision(mouse.pos)
+                            if collision != None:
+                                if collision == "next":
+                                    if not(not tmp_stack):
+                                        render_board.push(tmp_stack.pop())
+                                elif collision == "end":
+                                    while not(not tmp_stack):
+                                        render_board.push(tmp_stack.pop())
+                                elif collision == "previous":
+                                    if not not(render_board.move_stack):
+                                        tmp_stack.append(render_board.pop())
+                                elif collision == "begin":
+                                    while len(render_board.move_stack) >= 1:
+                                        tmp_stack.append(render_board.pop())
+            render.game_over(board)
+            render.board(render_board)
+            render.pieces(render_board,mouse)
+            pygame.display.flip()
+
     render.board(render_board)
     render.pieces(render_board,mouse)
 

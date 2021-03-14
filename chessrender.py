@@ -35,6 +35,10 @@ nextArrow = pygame.image.load("Assets/nextArrow.png")
 beginArrow = pygame.image.load("Assets/beginArrow.png")
 previousArrow = pygame.image.load("Assets/previousArrow.png")
 
+gameOver = pygame.image.load("Assets/gameOver.png")
+stalemate = pygame.image.load("Assets/stalemate.png")
+draw = pygame.image.load("Assets/draw.png")
+
 
 
 
@@ -127,6 +131,16 @@ def board(b):
         lastMove_rect =lastMove.get_rect(center=disc[(int(last_move[3])-1)*8+(ord(last_move[2])-ord('a')+1)][0])
         screen.blit(lastMove, lastMove_rect)
 
+def game_over(board):
+    if board.is_checkmate():
+        gameOver_rect = gameOver.get_rect(center=(650,200))
+        screen.blit( gameOver,  gameOver_rect)
+    elif board.is_stalemate():
+        stalemate_rect = stalemate.get_rect(center=(650,200))
+        screen.blit( stalemate,  stalemate_rect)
+    else:
+        draw_rect = draw.get_rect(center=(650,200))
+        screen.blit( draw,  draw_rect)
 
 
 def collided(position):
